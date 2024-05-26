@@ -104,6 +104,31 @@ function NumberGrid({ onTestFinish, setTestResult }) {
     }
   }, [timeLeft]);
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.ctrlKey || event.metaKey) {
+        switch (event.key) {
+          // Tastele care vrei să fie dezactivate
+          // Keys that you want to disable
+          case 'c': // copy
+          case 'v': // paste
+          case 'f': // search
+            event.preventDefault(); // prevent the default action
+            alert('This action is disabled on this page!');
+            break;
+        }
+      }
+    };
+
+    // Add the event listener to the document
+    document.addEventListener('keydown', handleKeyDown);
+
+    // Clean up the event listener when the component is unmounted or re-rendered
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   return (
     <div className="container mx-auto my-10 p-2 bg-white shadow-lg max-w-4xl">      
       <div className="mb-4">
@@ -114,7 +139,7 @@ function NumberGrid({ onTestFinish, setTestResult }) {
         </div>
         <div className="flex space-x-2 mb-4 justify-center">
           {controlNumbers.map((num, index) => (
-            <span key={index} className="font-bold text-lg text-base">{num}</span>
+            <span key={index} className="font-bold text-lg text-sm">{num}</span>
           ))}
         </div>
       </div>
